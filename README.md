@@ -15,6 +15,6 @@ becomes
 You should also consider discussing its useage with your professional indemnity and line manager. You should write your own shortcodes, and then you know that you have performed the request history taking or examination. For example, if you make the shortcode cccs above, then your practice must _always_ include checking the chest, and specifically excluding wheeze, murmurs and crackles _every time_ you use that code; or the system fails.
 
 ## Why do this?
-There's been a ridiculous rise in the number of clinicians using AI without any apparent legal consideration. That sucks.
+There's been a ridiculous rise in the number of clinicians using AI without any apparent legal consideration. **That sucks.**
 
-Also though, the medico-legal environment wants us to document every negative finding. I don't comment on the pancreas normally, but if I do an abdominal examination and don't document "No pancreatic masses", might I get sued in future when they have panreatic cancer? This is a way to make sure your documentation is 100% truthful, but also save on RSI from typing every negative finding.
+Also though, **the medico-legal environment wants us to document every negative finding**. I don't comment on absent murmurs normally, but I always listen to them, but if I do a chest examination and don't document "No murmurs", might I get sued in future when the patient develops have aortic stenosis? MedExpander is a way to make sure your documentation is 100% truthful, but also save on RSI from typing every negative finding.
