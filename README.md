@@ -10,7 +10,7 @@ becomes
 **Chest clear, no wheeze, no murmurs, no crackles.**
 
 ## Disclaimer:
-**The creator of this programme gives absolutely no indemnity or support to clinicians using this software. **
+**The creator of this programme gives absolutely no indemnity or support to clinicians using this software. Use at your own risk and liability**
 
 You should also consider discussing its useage with your professional indemnity and line manager. You should write your own shortcodes, and then you know that you have performed the request history taking or examination. For example, if you make the shortcode cccs above, then your practice must _always_ include checking the chest, and specifically excluding wheeze, murmurs and crackles _every time_ you use that code; or the system fails.
 
