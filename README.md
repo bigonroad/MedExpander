@@ -70,3 +70,5 @@ If Windows Defender or your browser flags this file, see the note above
 a global keyboard hook, not an indication of actual malicious behavior.
 Restoring from Defender's Protection History and adding a folder
 exclusion resolves it locally; code signing is the long-term fix.
+
+_Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)._
