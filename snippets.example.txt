@@ -1,0 +1,26 @@
+# MedExpand snippets
+# Each entry starts with a line '## abbreviation', followed by the text
+# to type, up to the next '## ' line. Blank lines inside the text are fine
+# (e.g. for a multi-paragraph letter) - only a line starting '## ' ends it.
+#
+# Three special placeholders are supported inside the text:
+#   {#cursor}              leaves the cursor here instead of at the end
+#   {#randomtext a|b|c}    picks one option at random, each time
+#   {#insert othername}   inserts another snippet's text by its name
+#
+# A single space is added automatically after every expansion.
+
+## ccc
+{#randomtext Lungs sound clear bilaterally, no crackles or wheeze.|Chest clear to auscultation, no added sounds.|Breath sounds normal throughout, no wheeze or crepitations.}
+
+## rv
+Follow up with patient in {#cursor}, sooner if symptoms worsen or anything changes.
+
+## rinsi
+Ask patient to return if symptoms haven't settled within {#cursor}. {#insert rimu}
+
+## rimu
+{#randomtext Come back sooner if things get worse, or go to urgent care if we're not available.|If symptoms worsen, please seek urgent care or contact us as soon as possible.|Return promptly if unwell, or attend A&E if you can't reach the surgery in time.}
+
+## apy
+Patient is afebrile, no signs of fever.

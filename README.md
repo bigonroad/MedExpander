@@ -1,20 +1,72 @@
-# MedExpander
-A simple text expander to help you write accurate but time-saving medical notes. No AI involved.
+# MedExpand
 
-You make your own phrases to complement your regularly used medical actions. So, for example:
+A Windows system-tray text expander, written in Go. Type an abbreviation
+followed by a space anywhere in Windows and it's replaced with a full
+snippet — built for clinical note templates, but general-purpose.
 
-**ccc**
+## Features
 
-becomes
+- Global text expansion via a low-level keyboard hook (works in any
+  Windows app — EMR, Word, browser, etc.)
+- Snippet placeholders: `{#cursor}`, `{#randomtext a|b|c}`, `{#insert name}`
+- In-app snippet editor (auto-sorts alphabetically on save)
+- Usage statistics (replacements, time saved, cost saved) logged to a
+  plain CSV file
+- A typing-speed test to calibrate the time-saved estimate
+- Tray icon dashboard (left-click or double-click the tray icon)
 
-**Chest clear, no wheeze, no murmurs, no crackles.**
+## Why this repo exists
 
-## Disclaimer:
-**The creator of this programme gives absolutely no indemnity or support to clinicians using this software. Use at your own risk and liability**
+This is a self-compiled, unsigned Windows executable. Because it installs
+a global keyboard hook and injects synthetic keystrokes (`SendInput`) to
+perform expansion, Windows Defender and other AV engines can flag it as
+a generic keylogger/trojan on heuristics alone — the *behavior* pattern
+(hook + inject) is identical to real spyware even though this tool only
+ever acts on the snippets you define yourself, with no network activity
+and no exfiltration of anything you type.
 
-You should also consider discussing its useage with your professional indemnity and line manager. You should write your own shortcodes, and then you know that you have performed the request history taking or examination. For example, if you make the shortcode cccs above, then your practice must _always_ include checking the chest, and specifically excluding wheeze, murmurs and crackles _every time_ you use that code; or the system fails.
+Publishing the source here and pursuing code signing is intended to
+establish provenance and build reputation with SmartScreen/Defender over
+time, since signed + publicly-auditable binaries are scored very
+differently than anonymous ones.
 
-## Why do this?
-There's been a ridiculous rise in the number of clinicians using AI without any apparent legal consideration. **That sucks.**
+## Building
 
-Also though, **the medico-legal environment wants us to document every negative finding**. I don't comment on absent murmurs normally, but I always listen to them, but if I do a chest examination and don't document "No murmurs", might I get sued in future when the patient develops have aortic stenosis? MedExpander is a way to make sure your documentation is 100% truthful, but also save on RSI from typing every negative finding.
+Requires Go 1.22+. Cross-compiles cleanly from Linux/macOS with no CGO
+and no Windows toolchain required:
+
+```bash
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build \
+  -trimpath -ldflags "-H=windowsgui -s -w" \
+  -o MedExpand.exe .
+```
+
+The icon is embedded via the included `rsrc_windows_amd64.syso` (a
+prebuilt Windows resource object containing the `.ico`). `go build`
+automatically links any `*_windows_amd64.syso` file found in the package
+directory — no extra build step needed. If you ever want to regenerate
+it from `medexpand.ico` (e.g. after changing the icon), use
+[`rsrc`](https://github.com/akavel/rsrc):
+
+```bash
+go install github.com/akavel/rsrc@latest
+rsrc -ico medexpand.ico -o rsrc_windows_amd64.syso
+```
+
+## Running
+
+Drop `MedExpand.exe` and a `snippets.txt` (see `snippets.example.txt` for
+the format) in the same folder, then run the exe. It lives in the system
+tray; right-click for the menu, left-click/double-click for the dashboard.
+
+`stats.csv` and `snippets.txt` are both created next to the exe on first
+run if they don't already exist, and are plain text so they're easy to
+back up, version, or inspect.
+
+## Known false-positive behavior
+
+If Windows Defender or your browser flags this file, see the note above
+— this is a heuristic false positive common to any self-built tool using
+a global keyboard hook, not an indication of actual malicious behavior.
+Restoring from Defender's Protection History and adding a folder
+exclusion resolves it locally; code signing is the long-term fix.
