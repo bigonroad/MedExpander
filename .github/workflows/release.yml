@@ -1,0 +1,55 @@
+name: Release (signed)
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-sign-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build
+        run: |
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build \
+            -trimpath -ldflags "-H=windowsgui -s -w" \
+            -o MedExpand.exe .
+
+      - name: Upload unsigned build
+        id: upload-unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: MedExpand-unsigned
+          path: MedExpand.exe
+
+      - name: Submit signing request to SignPath
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: MedExpander
+          signing-policy-slug: release-signing
+          github-artifact-id: ${{ steps.upload-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signed
+
+      - name: Checksums
+        run: |
+          cd signed
+          sha256sum MedExpand.exe > MedExpand.exe.sha256
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            signed/MedExpand.exe signed/MedExpand.exe.sha256 \
+            --title "${GITHUB_REF_NAME}" --generate-notes
